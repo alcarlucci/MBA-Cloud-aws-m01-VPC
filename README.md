@@ -5,3 +5,55 @@ aws-m01-VPC
 
 **Desenho da Arquitetura**
 ![M01_Cap03_Lab-VPC](https://user-images.githubusercontent.com/101406714/167273131-149eabc4-9cee-4124-9349-e735bb8be6b8.png)
+
+## Criação e configuração dos componentes da Rede
+
+**1. Criação da VPC (Virtual Private Cloud)**
+- VPC -> Your VPCs -> Create VPC
+  - Name: vpc-mbacloud-m01
+  - IPv4 CIDR: 10.0.0.0/16
+
+**2. Criação das Subnets Pública e Privada em zonas de disponibilidade diferentes**
+- VPC -> Subnets -> Create subnet
+
+- Subnet Pública:
+  - Name: snet-mbacloud-pub-1a
+  - AZ: us-east-1a
+  - IPv4 CIDR: 10.0.1.0/24
+- Subnet Privada:
+  - Name: snet-mbacloud-priv-1b
+  - AZ: us-east-1b
+  - IPv4 CIDR: 10.0.2.0/24
+
+## Configuração dos Gateways de comunicação e Tabelas de Roteamento
+
+**3. Criação do Internet Gateway para habilitar a comunicação da VPC com a Internet**
+- VPC -> Internet Gateways -> Create internet gateway
+  - Name: igw-mbacloud
+- Atachar o Internet Gateway na VPC
+  - VPC -> Internet Gateways -> Actions -> Attach to VPC (vpc-mbacloud-m01)
+
+**4. Criação do NAT Gateway para Subnet privada ter acesso a Internet (para isso ocorrer é preciso associar o NAT Gateway à Subnet pública)**
+- VPC -> NAT Gateways -> Create NAT gateway
+  - Name: ngw-mbacloud
+  - Subnet: snet-mbacloud-pub-1a (associado à Subnet pública)
+  - Connectivity type: Public
+
+**5. Criação de uma Tabela de Roteamento para associação com a Subnet Pública**
+- VPC -> Route Tables -> Create route table
+  - Name: rtab-mbacloud-pub
+- Inserção de uma rota para o Internet Gateway (comunicação com a Internet)
+  - Route Tables -> Routes -> Edit routes -> Add route: 0.0.0.0/0 com Target no Internet Gateway (igw-mbacloud)
+- Associação com a Subnet pública
+  - Route Tables -> Subnet associations -> Edit subnet associations: seleciona a Subnet pública (snet-mbacloud-pub-1a)
+
+**6. Criação de uma Tabela de Roteamento para associação com a Subnet Privada**
+- VPC -> Route Tables -> Create route table
+  - Name: rtab-mbacloud-priv
+- Inserção de uma rota para o NAT Gateway (comunicação de saída da subnet privada com a Internet)
+  - Route Tables -> Routes -> Edit routes -> Add route: 0.0.0.0/0 com Target no NAT Gateway (ngw-mbacloud)
+- Associação com a Subnet privada
+  - Route Tables -> Subnet associations -> Edit subnet associations: seleciona a Subnet privada (snet-mbacloud-priv-1b)
+
+##
+**André Carlucci**
