@@ -1,5 +1,5 @@
 aws-m01-VPC
-# IGTI - MBA Cloud: provisionamento de uma Arquitetura Básica de VPC na AWS
+# IGTI - MBA Cloud: provisionamento de uma Arquitetura Básica de Redes na AWS (VPC)
 
 ## Arquitetura básica de uma VPC com duas Subnets - uma pública e uma privada:
 
@@ -13,6 +13,8 @@ aws-m01-VPC
   - Name: vpc-mbacloud-m01
   - IPv4 CIDR: 10.0.0.0/16
 
+![image](https://user-images.githubusercontent.com/101406714/167306539-6685b1a7-8c99-4449-9477-e01f592b4744.png)
+
 **2. Criação das Subnets Pública e Privada em zonas de disponibilidade diferentes**
 - VPC -> Subnets -> Create subnet
 
@@ -25,6 +27,8 @@ aws-m01-VPC
   - AZ: us-east-1b
   - IPv4 CIDR: 10.0.2.0/24
 
+![image](https://user-images.githubusercontent.com/101406714/167306739-0265e26c-e30b-4217-a3b3-426548727359.png)
+
 ## Configuração dos Gateways de comunicação e Tabelas de Roteamento
 
 **3. Criação do Internet Gateway para habilitar a comunicação da VPC com a Internet**
@@ -33,11 +37,15 @@ aws-m01-VPC
 - Atachar o Internet Gateway na VPC
   - VPC -> Internet Gateways -> Actions -> Attach to VPC (vpc-mbacloud-m01)
 
+![image](https://user-images.githubusercontent.com/101406714/167306913-f52c62fe-b709-47d7-bc46-9ad171310957.png)
+
 **4. Criação do NAT Gateway para Subnet privada ter acesso a Internet (para isso ocorrer é preciso associar o NAT Gateway à Subnet pública)**
 - VPC -> NAT Gateways -> Create NAT gateway
   - Name: ngw-mbacloud
   - Subnet: snet-mbacloud-pub-1a (associado à Subnet pública)
   - Connectivity type: Public
+
+![image](https://user-images.githubusercontent.com/101406714/167307743-e88b9a87-aa72-4d62-bc20-c9fc6100732b.png)
 
 **5. Criação de uma Tabela de Roteamento para associação com a Subnet Pública**
 - VPC -> Route Tables -> Create route table
@@ -47,6 +55,8 @@ aws-m01-VPC
 - Associação com a Subnet pública
   - Route Tables -> Subnet associations -> Edit subnet associations: seleciona a Subnet pública (snet-mbacloud-pub-1a)
 
+![image](https://user-images.githubusercontent.com/101406714/167307261-a3066b8a-217b-4b15-aedc-988d43e592ae.png)
+
 **6. Criação de uma Tabela de Roteamento para associação com a Subnet Privada**
 - VPC -> Route Tables -> Create route table
   - Name: rtab-mbacloud-priv
@@ -54,6 +64,8 @@ aws-m01-VPC
   - Route Tables -> Routes -> Edit routes -> Add route: 0.0.0.0/0 com Target no NAT Gateway (ngw-mbacloud)
 - Associação com a Subnet privada
   - Route Tables -> Subnet associations -> Edit subnet associations: seleciona a Subnet privada (snet-mbacloud-priv-1b)
+
+![image](https://user-images.githubusercontent.com/101406714/167308007-298c6299-3dd0-4bc8-b787-282ac03f00e8.png)
 
 ##
 **André Carlucci**
