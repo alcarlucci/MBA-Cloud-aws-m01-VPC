@@ -67,5 +67,25 @@ aws-m01-VPC
 
 ![image](https://user-images.githubusercontent.com/101406714/167308007-298c6299-3dd0-4bc8-b787-282ac03f00e8.png)
 
+## Criação das Instâncias EC2 e configuração básica das conexões
+
+**7. Criação das Instâncias EC2 nas Subnets da VPC**
+- EC2 -> Instances -> Launch instances
+
+- Instância Amazon Linux na Subnet Pública (snet-mbacloud-pub-1a)
+  - Name: vm-Linux-pub
+  - Security Group: criação de novo SG habilitando conexão SSH
+- Instância Amazon Linux na Subnet Privada (snet-mbacloud-priv-1b)
+  - Name: vm-Linux-priv
+
+![image](https://user-images.githubusercontent.com/101406714/167396817-7b7402ec-6ce7-4b83-aff5-1df20bfe12e0.png)
+
+- para testar a conexão na Instância pública via SSH, usar o comando:
+```
+ssh -i [nomekeypair.pem] ec2-user@[PublicIP]
+```
+Conectado na instância "vm-Linux-pub"
+![image](https://user-images.githubusercontent.com/101406714/167397307-76379c67-402a-49e3-99e9-a7f388b0ffe3.png)
+
 ##
 **André Carlucci**
